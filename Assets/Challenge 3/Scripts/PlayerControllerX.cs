@@ -9,6 +9,8 @@ public class PlayerControllerX : MonoBehaviour
     public float floatForce;
     private float gravityModifier = 1.5f;
     private Rigidbody playerRb;
+    public float verticalLimitUp = 14.0f;
+    public float verticalLimitDown = 1.5f;
 
     public ParticleSystem explosionParticle;
     public ParticleSystem fireworksParticle;
@@ -23,6 +25,7 @@ public class PlayerControllerX : MonoBehaviour
     {
         Physics.gravity *= gravityModifier;
         playerAudio = GetComponent<AudioSource>();
+        playerRb = GetComponent<Rigidbody>();
 
         // Apply a small upward force at the start of the game
         playerRb.AddForce(Vector3.up * 5, ForceMode.Impulse);
@@ -36,6 +39,16 @@ public class PlayerControllerX : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && !gameOver)
         {
             playerRb.AddForce(Vector3.up * floatForce);
+        }
+        if (transform.position.y > verticalLimitUp)
+        {
+            transform.position = new Vector3(transform.position.x, verticalLimitUp, transform.position.z);
+            playerRb.velocity = Vector3.zero;
+        }
+        if(transform.position.y < verticalLimitDown)
+        {
+            transform.position = new Vector3(transform.position.x, verticalLimitDown, transform.position.z);
+            playerRb.velocity = Vector3.zero;
         }
     }
 
